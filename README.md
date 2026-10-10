@@ -85,7 +85,7 @@ Vérification de production :
 
 ```bash
 npm run build
-npm run start
+npm run start   # sert le dossier statique `out/` sur http://localhost:3000
 ```
 
 > Le site fonctionne sans aucune variable d'environnement.
@@ -257,8 +257,8 @@ Copiez `.env.example` en `.env.local` si besoin. Aucune clé n'est requise.
 
 - **Aucun backend** : aucune collecte, aucun envoi, aucun cookie de suivi.
 - Le livre d'or reste dans le navigateur ; l'utilisateur peut le vider.
-- En-têtes de sécurité appliqués (`next.config.ts`) : CSP, `X-Frame-Options`,
-  `Referrer-Policy`, etc.
+- En-têtes de sécurité appliqués par l'hébergeur via `public/_headers` (CSP,
+  `X-Frame-Options`, `Referrer-Policy`, etc.).
 - La vidéo YouTube passe par le domaine `youtube-nocookie`.
 - La musique n'est jamais en lecture automatique.
 
@@ -277,17 +277,29 @@ Copiez `.env.example` en `.env.local` si besoin. Aucune clé n'est requise.
 
 - Page entièrement **statique** (générée au build), aucune requête au serveur.
 - Révélations et halos en `will-change`/`transform` uniquement.
-- `next/image` pour les photos (formats AVIF/WebP).
+- Images servies depuis `public/` (déjà optimisées en amont, aucun re-traitement au run).
 - Polices auto-hébergées via `next/font`.
 
 ---
 
 ## Déploiement
 
-Compatible avec tout hébergeur static/Node (Vercel, Netlify, etc.).
+Le site est **100 % statique** : `next build` génère un dossier `out/`
+(`output: "export"`) déployable sur n'importe quel hébergeur — Netlify, Vercel,
+GitHub Pages, etc. Aucun serveur, aucune fonction, aucune base de données.
 
-1. Définissez `NEXT_PUBLIC_SITE_URL` sur l'URL de production.
-2. `npm run build` puis deployez. *(Sur Vercel : rien à faire de plus.)*
+### Netlify (recommandé)
+
+1. Poussez le dépôt sur GitHub, puis **Netlify → Add new site → Import from Git**.
+2. Choisissez le dépôt ; Netlify lit automatiquement `netlify.toml`
+   (build : `npm run build`, publication : `out/`).
+3. Déployez. En-têtes de sécurité et CSP sont appliqués via `public/_headers`
+   (copié dans `out/_headers`).
+
+### Autre hébergeur statique
+
+Servez simplement le contenu du dossier `out/` après `npm run build`. Si la
+plateforme ne lit pas `_headers`, reportez-y manuellement les en-têtes attendus.
 
 ---
 
@@ -296,8 +308,8 @@ Compatible avec tout hébergeur static/Node (Vercel, Netlify, etc.).
 | Script | Description |
 | --- | --- |
 | `npm run dev` | Serveur de développement. |
-| `npm run build` | Build de production. |
-| `npm run start` | Sert le build de production. |
+| `npm run build` | Build de production → génère le dossier statique `out/`. |
+| `npm run start` | Sert le dossier statique `out/` (prévisualisation locale). |
 | `npm run lint` | Analyse ESLint. |
 | `npm run lint:fix` | ESLint avec corrections automatiques. |
 | `npm run typecheck` | Vérification des types (`tsc --noEmit`). |
@@ -316,7 +328,7 @@ Compatible avec tout hébergeur static/Node (Vercel, Netlify, etc.).
   (outils de développement uniquement), hors du bundle applicatif ; le
   corriger imposerait de rétrograder `eslint-config-next`.
 - **CSP avec `'unsafe-inline'`** pour les scripts d'hydratation de Next.js
-  (voir `next.config.ts`).
+  (voir `public/_headers`).
 
 ---
 

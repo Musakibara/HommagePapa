@@ -1,58 +1,24 @@
 import type { NextConfig } from "next";
 
 /**
- * En-têtes de sécurité appliqués à toutes les réponses.
+ * Site 100 % statique (`output: "export"`) : il n'y a plus de serveur, donc
+ * les en-têtes de sécurité sont appliqués par l'hébergeur via le fichier
+ * `public/_headers` (copié dans `out/_headers`, lu par Netlify et les
+ * plateformes statiques équivalentes).
  *
- * Note : la politique CSP autorise `'unsafe-inline'` pour les scripts car Next.js
- * injecte des scripts d'hydratation en ligne. Pour un durcissement complet, voir
- * la section « Sécurité » du README (approche par nonce via un middleware).
+ * Note : la politique CSP autorise `'unsafe-inline'` car Next.js injecte des
+ * scripts inline (payload hydratation / RSC) dans le HTML exporté.
  */
-const securityHeaders = [
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "X-Frame-Options", value: "DENY" },
-  {
-    key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
-  },
-  {
-    key: "Content-Security-Policy",
-    value: [
-      "default-src 'self'",
-      "base-uri 'self'",
-      "object-src 'none'",
-      "frame-ancestors 'none'",
-      "img-src 'self' data: blob: https:",
-      "media-src 'self' https:",
-      "font-src 'self' data:",
-      "style-src 'self' 'unsafe-inline'",
-      "script-src 'self' 'unsafe-inline'",
-      "connect-src 'self' https:",
-      "form-action 'self'",
-      "upgrade-insecure-requests",
-    ].join("; "),
-  },
-];
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // `next build` génère un dossier `out/` déployable n'importe où
+  // (Netlify, GitHub Pages…). Aucun serveur requis.
+  output: "export",
   images: {
-    formats: ["image/avif", "image/webp"],
-    // Autorise les images distantes si vous en hébergez ailleurs que dans /public.
-    // Restreignez ou retirez cette liste si vous n'en utilisez pas.
-    remotePatterns: [
-      { protocol: "https", hostname: "**.supabase.co" },
-      { protocol: "https", hostname: "**.supabase.in" },
-    ],
-  },
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: securityHeaders,
-      },
-    ];
+    // Export statique : les images sont servies telles quelles depuis /public
+    // (déjà optimisées par l'auteur), sans serveur d'optimisation.
+    unoptimized: true,
   },
 };
 
