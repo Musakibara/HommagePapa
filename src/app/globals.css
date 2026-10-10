@@ -1,0 +1,307 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Hommage à Papa — Design system « célébration nocturne »
+   --------------------------------------------------------------------------
+   Thème sombre + verre (glassmorphism). Accents or champagne et braise.
+   ========================================================================== */
+
+@theme {
+  /* --- Fonds ------------------------------------------------------------- */
+  --color-void: #05050a;
+  --color-night: #0a0a12;
+  --color-coal: #11111c;
+  --color-slate: #1a1a28;
+
+  /* --- Or champagne ------------------------------------------------------ */
+  --color-gold: #e6c27a;
+  --color-gold-bright: #ffe7ae;
+  --color-gold-deep: #c2974a;
+
+  /* --- Braise ------------------------------------------------------------ */
+  --color-ember: #ff7a45;
+  --color-ember-soft: #ffa06e;
+  --color-rose: #ff6b8a;
+
+  /* --- Neutres ----------------------------------------------------------- */
+  --color-ivory: #f7f2e8;
+  --color-mist: #b3afa7;
+  --color-mist-soft: #85827b;
+
+  /* --- Typographie ------------------------------------------------------- */
+  --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman",
+    serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* --- Rayons & ombres --------------------------------------------------- */
+  --radius-card: 1.25rem;
+  --radius-panel: 1.75rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes hp-float {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-18px) translateX(6px);
+  }
+}
+
+@keyframes hp-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-3%, 2%, 0) scale(0.96);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes hp-ember {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--ember-opacity, 0.7);
+  }
+  85% {
+    opacity: var(--ember-opacity, 0.7);
+  }
+  100% {
+    transform: translateY(-120vh) translateX(var(--ember-drift, 20px)) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes hp-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes hp-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes hp-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hp-rise {
+  0% {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+    -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-void);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Barre de défilement discrète et dorée. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-void);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(230, 194, 122, 0.4),
+      rgba(255, 122, 69, 0.35)
+    );
+    border-radius: 999px;
+    border: 2px solid var(--color-void);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ==========================================================================
+   Utilitaires composés
+   ========================================================================== */
+
+/* Sur-titre : petites capitales dorées, très espacées. */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+/* Panneau de verre principal. */
+@utility glass {
+  background-color: rgba(17, 17, 28, 0.42);
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.015)
+  );
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 30px 70px -34px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Panneau de verre plus dense (cartes de contenu). */
+@utility glass-card {
+  background-color: rgba(20, 20, 32, 0.55);
+  background-image: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.01) 60%
+  );
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 24px 60px -38px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Filet lumineux doré, dégradé. */
+@utility rule-gold {
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-gold) 35%,
+    var(--color-ember) 65%,
+    transparent
+  );
+}
+
+/* Texte en dégradé or → braise. */
+@utility text-shine {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-bright),
+    var(--color-gold) 32%,
+    var(--color-ember-soft) 62%,
+    var(--color-gold-bright)
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: hp-shimmer 8s linear infinite;
+}
+
+/* Halo doré. */
+@utility glow-gold {
+  box-shadow:
+    0 0 0 1px rgba(230, 194, 122, 0.25),
+    0 0 45px -10px rgba(230, 194, 122, 0.5);
+}
+
+/* Carte interactive : transition + état de survol (déclaré en couche CSS
+   car @utility n'accepte pas de pseudo-classe). */
+@layer components {
+  .card-interactive {
+    transition:
+      transform 0.5s var(--ease-out-expo),
+      border-color 0.5s var(--ease-out-expo),
+      box-shadow 0.5s var(--ease-out-expo);
+  }
+
+  .card-interactive:hover {
+    transform: translateY(-6px);
+    border-color: rgba(230, 194, 122, 0.4);
+    box-shadow:
+      0 40px 80px -40px rgba(0, 0, 0, 0.95),
+      0 0 40px -18px rgba(255, 122, 69, 0.5);
+  }
+}
+
+/* Interlignage confortable pour les textes longs. */
+@utility prose-night {
+  line-height: 1.95;
+  color: rgba(247, 242, 232, 0.82);
+}
