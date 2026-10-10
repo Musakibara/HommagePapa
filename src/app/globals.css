@@ -305,3 +305,231 @@
   line-height: 1.95;
   color: rgba(247, 242, 232, 0.82);
 }
+
+/* ==========================================================================
+   Animation d'entrée « L'Ouverture »
+   --------------------------------------------------------------------------
+   Première impression plein écran : monogramme + anneau dessiné, mot révélé,
+   filet or, puis rideau qui se lève. Déclenchée par
+   src/components/fx/entrance-overlay.tsx. Désactivée si mouvement réduit.
+   ========================================================================== */
+
+@keyframes hp-intro-ring {
+  0% {
+    stroke-dashoffset: var(--ring-c, 578px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes hp-intro-m {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: blur(14px);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes hp-intro-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes hp-intro-word {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(8px);
+    letter-spacing: 0.14em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    letter-spacing: 0.02em;
+  }
+}
+
+@keyframes hp-intro-line {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes hp-intro-ember {
+  0% {
+    opacity: 0;
+    transform: translateX(-20%);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(20%);
+  }
+}
+
+/* Voile plein écran : invisible tant qu'il n'est pas « actif ». */
+.entrance-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(120% 120% at 50% 18%, rgba(230, 194, 122, 0.07), transparent 60%),
+    var(--color-void);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.45s ease,
+    transform 0.9s var(--ease-out-expo);
+}
+
+.entrance-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Rideau qui se lève. */
+.entrance-overlay.is-exiting {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
+  pointer-events: none;
+  transition:
+    opacity 0.55s ease,
+    transform 0.9s var(--ease-out-expo),
+    visibility 0s linear 0.95s;
+}
+
+.entrance-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.55rem;
+}
+
+.entrance-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 11rem;
+  height: 11rem;
+}
+
+.entrance-ring {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  filter: drop-shadow(0 0 18px rgba(230, 194, 122, 0.35));
+  animation: hp-intro-ring 1s var(--ease-out-expo) both;
+}
+
+.entrance-ring-rotate {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hp-spin-slow 18s linear 1s infinite;
+}
+
+.entrance-monogram {
+  font-family: var(--font-serif);
+  font-size: 4.6rem;
+  font-style: italic;
+  line-height: 1;
+  animation: hp-intro-m 0.7s var(--ease-out-expo) both;
+}
+
+.entrance-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-gold);
+  opacity: 0;
+  animation: hp-intro-fade-up 0.55s ease both;
+}
+
+.entrance-wordmark {
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 6.5vw, 3.5rem);
+  line-height: 1.1;
+  color: var(--color-ivory);
+}
+
+.entrance-word {
+  display: inline-block;
+  will-change: opacity, transform, filter;
+  opacity: 0;
+  animation: hp-intro-word 0.6s var(--ease-out-expo) both;
+}
+
+.entrance-word + .entrance-word {
+  margin-left: 0.16em;
+}
+
+.entrance-line {
+  display: block;
+  width: min(230px, 60vw);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold) 40%,
+    var(--color-ember) 72%,
+    transparent
+  );
+  transform: scaleX(0);
+  opacity: 0;
+  animation: hp-intro-line 0.6s var(--ease-out-expo) both;
+}
+
+/* Souffle de braise bas, très discret. */
+.entrance-ember {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(36% 24% at 50% 82%, rgba(255, 122, 69, 0.5), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: hp-intro-ember 0.9s ease 1.9s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrance-overlay {
+    display: none;
+  }
+}

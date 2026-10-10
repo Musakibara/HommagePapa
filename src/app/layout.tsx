@@ -8,7 +8,9 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { Backdrop } from "@/components/fx/backdrop";
 import { Confetti } from "@/components/fx/confetti";
 import { ScrollProgress } from "@/components/fx/scroll-progress";
+import { ScrollReset } from "@/components/fx/scroll-reset";
 import { CelebrateButton } from "@/components/fx/celebrate-button";
+import { EntranceOverlay } from "@/components/fx/entrance-overlay";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,6 +65,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="relative min-h-dvh text-ivory antialiased">
+        <ScrollReset />
         <Backdrop />
         <ScrollProgress />
 
@@ -79,6 +82,13 @@ export default function RootLayout({
 
         <CelebrateButton />
         <Confetti />
+        <EntranceOverlay
+          siteName={site.siteName}
+          tagline={site.siteTagline}
+          monogram={
+            site.father.monogram ?? site.father.firstName.charAt(0).toUpperCase()
+          }
+        />
       </body>
     </html>
   );
