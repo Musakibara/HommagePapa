@@ -45,8 +45,20 @@ export function Hero({
             </Reveal>
 
             <Reveal delay={0.24}>
-              <p className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <p className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
                 <span className="font-serif text-2xl text-gold-bright">{father.firstName}</span>
+                {father.nicknames.length > 0 ? (
+                  <span className="flex flex-wrap items-center gap-1.5">
+                    {father.nicknames.map((nickname) => (
+                      <span
+                        key={nickname}
+                        className="rounded-full border border-gold/30 bg-gold/5 px-2.5 py-0.5 font-sans text-xs tracking-wide text-gold-bright"
+                      >
+                        {nickname}
+                      </span>
+                    ))}
+                  </span>
+                ) : null}
                 <span className="h-px w-8 bg-gradient-to-r from-gold to-ember" aria-hidden="true" />
                 <span className="font-sans text-sm tracking-wide text-mist">
                   {celebrationLabel}
@@ -74,7 +86,7 @@ export function Hero({
           </div>
 
           <Reveal delay={0.18} y={36}>
-            <HeroPortrait initial={father.firstName.charAt(0).toUpperCase()}>
+            <HeroPortrait initial={father.monogram ?? father.firstName.charAt(0).toUpperCase()}>
               {hero.image.src ? (
                 <MediaFrame
                   image={hero.image}

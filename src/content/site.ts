@@ -14,16 +14,16 @@ export const siteConfig = {
   siteName: "Hommage à Papa",
   siteTagline: "Une célébration de la vie",
   description:
-    "Un album numérique et une lettre collective pour célébrer l'anniversaire d'un père, raconter son histoire et lui dire merci.",
+    "Un album numérique et une lettre collective pour célébrer l'anniversaire de Jean Paul, raconter son histoire et lui dire merci.",
 
   locale: "fr-FR",
   // Fuseau horaire utilisé pour interpréter la date ci-dessous et afficher les dates.
-  timeZone: "Europe/Paris",
+  timeZone: "Africa/Douala",
 
   // ⚠️  À remplacer par la vraie date. Format local « AAAA-MM-JJTHH:MM:SS ».
   // Mettre `null` pour masquer le compte à rebours.
-  celebrationDateTime: "2026-12-05T19:00:00",
-  celebrationLabel: "5 décembre 2026",
+  celebrationDateTime: "2026-11-12T00:00:00",
+  celebrationLabel: "12 novembre 2026",
 
   // Affiche les contenus explicitement marqués « démonstration ».
   // Passez à `false` une fois vos vrais contenus en place.
@@ -31,13 +31,17 @@ export const siteConfig = {
 
   father: {
     // Prénom affiché dans les titres. Remplacez par son vrai prénom.
-    firstName: "Papa",
-    fullName: "Notre papa",
+    firstName: "Jean Paul",
+    fullName: "Moupefo Jean Paul",
     // Âge célébré : mettez un nombre (ex. 70) pour l'afficher. `null` = masqué.
     age: null,
     // Année de naissance : ex. 1956. `null` = masqué.
     birthYear: null,
-    epithet: "L'homme qui nous a tant donné",
+    // Surnoms affectueux, affichés près de son prénom.
+    nicknames: ["JPS", "69"],
+    // Lettre du monogramme dans le grand cadre du héros (initiale de « Moupefo »).
+    monogram: "M",
+    epithet: "L'homme qu'on appelle JPS",
   },
 
   // Activez / désactivez chaque section de la page d'accueil.
@@ -135,7 +139,7 @@ export const siteConfig = {
       "Ce serait peut-être simplement : merci. Merci d'avoir été là, sans bruit, avec cette constance qui rassure et qui construit.",
       "Tu nous as appris que la valeur d'une vie ne se mesure pas à ce qu'elle accumule, mais à ce qu'elle donne. Et tu as donné, encore et encore, souvent sans rien attendre en retour.",
       "Aujourd'hui, nous voulons te rendre un peu de cette chaleur. Que cette page soit un endroit où l'on puisse te redire, à plusieurs voix, à quel point tu comptes.",
-      "Joyeux anniversaire, papa. Nous t'aimons.",
+      "Joyeux anniversaire, Jean Paul. Nous t'aimons.",
     ],
     signature: "Avec tout notre amour, ta famille",
     revealLabel: "Lire la lettre",
@@ -166,7 +170,7 @@ export const siteConfig = {
   finale: {
     title: "La plus belle chose que tu nous aies transmise, c'est l'amour.",
     message:
-      "Merci pour tout, papa. Que cette journée te ressemble : chaleureuse, généreuse et pleine de ceux qui t'aiment.",
+      "Merci pour tout, Jean Paul. Que cette journée te ressemble : chaleureuse, généreuse et pleine de ceux qui t'aiment.",
     image: {
       src: null,
       alt: "Photographie de famille — emplacement à remplacer",

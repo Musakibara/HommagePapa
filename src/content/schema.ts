@@ -162,6 +162,10 @@ export const fatherSchema = z.object({
   age: z.number().int().positive().nullable().default(null),
   /** Année de naissance. `null` pour masquer. */
   birthYear: z.number().int().min(1900).max(2100).nullable().default(null),
+  /** Surnoms affectueux affichés près du prénom (ex. « JPS », « 69 »). */
+  nicknames: z.array(z.string().min(1)).default([]),
+  /** Lettre du monogramme dans le cadre du héros (1–2 caractères). Par défaut : initiale du prénom. */
+  monogram: z.string().trim().min(1).max(2).optional(),
   /** Courte épithète personnelle (ex. « L'homme qui nous a tant donné »). */
   epithet: z.string(),
 });
