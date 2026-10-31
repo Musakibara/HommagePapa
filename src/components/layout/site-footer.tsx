@@ -45,7 +45,7 @@ export function SiteFooter({ site }: { site: SiteConfig }) {
             {site.footer.familyNote}
           </p>
           <p className="font-sans text-xs text-mist-soft">
-            {site.footer.credit} · {year}
+            {site.footer.credit} · {site.father.fullName} · {year}
           </p>
         </div>
       </div>

@@ -36,28 +36,28 @@ export function Backdrop() {
       {/* Aurore : halos de couleur animés. */}
       <div className="absolute inset-0 bg-void" />
       <div
-        className="absolute -left-[15%] -top-[20%] h-[60vw] w-[60vw] rounded-full opacity-40 blur-[130px]"
+        className="backdrop-halo absolute -left-[15%] -top-[20%] h-[60vw] w-[60vw] rounded-full opacity-40 blur-[130px]"
         style={{
           background: "radial-gradient(circle, #e6c27a 0%, transparent 68%)",
           animation: "hp-drift 26s ease-in-out infinite",
         }}
       />
       <div
-        className="absolute -right-[18%] top-[6%] h-[52vw] w-[52vw] rounded-full opacity-35 blur-[140px]"
+        className="backdrop-halo absolute -right-[18%] top-[6%] h-[52vw] w-[52vw] rounded-full opacity-35 blur-[140px]"
         style={{
           background: "radial-gradient(circle, #ff7a45 0%, transparent 70%)",
           animation: "hp-drift 32s ease-in-out infinite reverse",
         }}
       />
       <div
-        className="absolute bottom-[-24%] left-[24%] h-[58vw] w-[58vw] rounded-full opacity-25 blur-[150px]"
+        className="backdrop-halo absolute bottom-[-24%] left-[24%] h-[58vw] w-[58vw] rounded-full opacity-25 blur-[150px]"
         style={{
           background: "radial-gradient(circle, #ff6b8a 0%, transparent 72%)",
           animation: "hp-drift 38s ease-in-out infinite",
         }}
       />
       <div
-        className="absolute right-[8%] bottom-[-10%] h-[40vw] w-[40vw] rounded-full opacity-25 blur-[130px]"
+        className="backdrop-halo absolute right-[8%] bottom-[-10%] h-[40vw] w-[40vw] rounded-full opacity-25 blur-[130px]"
         style={{
           background: "radial-gradient(circle, #6d5bd0 0%, transparent 70%)",
           animation: "hp-drift 30s ease-in-out infinite reverse",
@@ -87,7 +87,7 @@ export function Backdrop() {
       {EMBERS.map((ember, index) => (
         <span
           key={index}
-          className="absolute bottom-[-10vh] rounded-full"
+          className="backdrop-ember absolute bottom-[-10vh] rounded-full"
           style={{
             left: ember.left,
             width: ember.size,

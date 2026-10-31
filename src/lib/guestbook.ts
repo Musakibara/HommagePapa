@@ -35,7 +35,7 @@ export const guestbookSchema = z.object({
       message: "Votre message ne doit pas dépasser 1200 caractères.",
     }),
   consent: z.boolean().refine((value) => value === true, {
-    message: "Cochez cette case pour partager votre message.",
+    message: "Cochez cette case pour enregistrer votre message.",
   }),
 });
 
@@ -57,19 +57,25 @@ let cache: GuestbookEntry[] | null = null;
 
 const EMPTY: GuestbookEntry[] = [];
 
+function isGuestbookEntry(value: unknown): value is GuestbookEntry {
+  if (typeof value !== "object" || value === null) return false;
+  const entry = value as Partial<GuestbookEntry>;
+  return (
+    typeof entry.id === "string" &&
+    typeof entry.authorName === "string" &&
+    (typeof entry.relationship === "string" || entry.relationship === null) &&
+    typeof entry.body === "string" &&
+    typeof entry.createdAt === "string"
+  );
+}
+
 function readFromStorage(): GuestbookEntry[] {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return EMPTY;
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed)) return EMPTY;
-    return parsed.filter(
-      (entry): entry is GuestbookEntry =>
-        typeof entry === "object" &&
-        entry !== null &&
-        typeof (entry as GuestbookEntry).id === "string" &&
-        typeof (entry as GuestbookEntry).body === "string",
-    );
+    return parsed.filter(isGuestbookEntry);
   } catch {
     return EMPTY;
   }
@@ -83,48 +89,61 @@ export function loadGuestbook(): GuestbookEntry[] {
   return cache;
 }
 
-export function addGuestbookEntry(values: GuestbookValues): GuestbookEntry {
+/**
+ * Enregistre un message localement.
+ * Retourne `null` si le stockage est indisponible (navigation privée, quota,
+ * stockage désactivé) : l'appelant peut ainsi afficher une vraie erreur au
+ * lieu de faire croire à un succès.
+ */
+export function addGuestbookEntry(values: GuestbookValues): GuestbookEntry | null {
+  if (typeof window === "undefined") return null;
+
   const entry: GuestbookEntry = {
     id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    authorName: values.authorName,
+    authorName: values.authorName.trim(),
     relationship: values.relationship?.trim() ? values.relationship.trim() : null,
     body: values.body.trim(),
     createdAt: new Date().toISOString(),
   };
 
-  if (typeof window !== "undefined") {
-    try {
-      const next = [entry, ...readFromStorage()].slice(0, 100);
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      cache = next;
-      window.dispatchEvent(new Event(CHANGE_EVENT));
-    } catch {
-      // Quota / navigation privée : on n'échoue pas, l'entrée reste affichée.
-    }
+  try {
+    const next = [entry, ...readFromStorage()].slice(0, 100);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    cache = next;
+    window.dispatchEvent(new Event(CHANGE_EVENT));
+    return entry;
+  } catch {
+    return null;
   }
-
-  return entry;
 }
 
-export function removeGuestbookEntry(id: string): void {
-  if (typeof window === "undefined") return;
+export function removeGuestbookEntry(id: string): boolean {
+  if (typeof window === "undefined") return false;
   try {
     const next = readFromStorage().filter((entry) => entry.id !== id);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     cache = next;
     window.dispatchEvent(new Event(CHANGE_EVENT));
+    return true;
   } catch {
-    // Ignoré.
+    return false;
   }
 }
 
 /** S'abonne aux changements (même onglet + autres onglets). */
 export function subscribeGuestbook(callback: () => void): () => void {
   if (typeof window === "undefined") return () => {};
+
+  const onStorage = () => {
+    // Un autre onglet a modifié le stockage : le cache n'est plus valide.
+    cache = null;
+    callback();
+  };
+
   window.addEventListener(CHANGE_EVENT, callback);
-  window.addEventListener("storage", callback);
+  window.addEventListener("storage", onStorage);
   return () => {
     window.removeEventListener(CHANGE_EVENT, callback);
-    window.removeEventListener("storage", callback);
+    window.removeEventListener("storage", onStorage);
   };
 }

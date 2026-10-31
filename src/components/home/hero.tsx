@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { SiteConfig } from "@/content/schema";
 import { MediaFrame } from "@/components/media/media-frame";
-import { Reveal } from "@/components/motion/reveal";
 import { Container } from "@/components/ui/section";
 import { buttonVariants } from "@/components/ui/button";
 import { Spotlight } from "@/components/fx/spotlight";
@@ -23,69 +22,69 @@ export function Hero({
       <Spotlight />
 
       <Container className="relative z-10">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
           <div>
-            <Reveal>
-              <p className="eyebrow flex items-center gap-3 text-gold">
-                <span className="rule-gold w-10" aria-hidden="true" />
-                {hero.eyebrow}
+            <p className="eyebrow flex items-center gap-3 text-gold">
+              <span className="rule-gold w-10" aria-hidden="true" />
+              {hero.eyebrow}
+            </p>
+
+            <h1 className="mt-6 font-serif text-[2.35rem] leading-[1.06] sm:text-6xl lg:text-[4.4rem]">
+              <span className="text-shine-static">{hero.title}</span>
+            </h1>
+
+            {father.epithet ? (
+              <p className="mt-3 font-serif text-base italic text-gold/90 sm:text-lg">
+                {father.epithet}
               </p>
-            </Reveal>
+            ) : null}
 
-            <Reveal delay={0.08}>
-              <h1 className="mt-6 font-serif text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-[4.4rem]">
-                <span className="text-shine">{hero.title}</span>
-              </h1>
-            </Reveal>
+            <p className="mt-6 max-w-xl font-sans text-sm leading-relaxed text-mist sm:mt-7 sm:text-lg">
+              {hero.subtitle}
+            </p>
 
-            <Reveal delay={0.16}>
-              <p className="mt-7 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg">
-                {hero.subtitle}
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.24}>
-              <p className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
-                <span className="font-serif text-2xl text-gold-bright">{father.firstName}</span>
-                {father.nicknames.length > 0 ? (
-                  <span className="flex flex-wrap items-center gap-1.5">
-                    {father.nicknames.map((nickname) => (
-                      <span
-                        key={nickname}
-                        className="rounded-full border border-gold/30 bg-gold/5 px-2.5 py-0.5 font-sans text-xs tracking-wide text-gold-bright"
-                      >
-                        {nickname}
-                      </span>
-                    ))}
-                  </span>
-                ) : null}
-                <span className="h-px w-8 bg-gradient-to-r from-gold to-ember" aria-hidden="true" />
-                <span className="font-sans text-sm tracking-wide text-mist">
-                  {celebrationLabel}
-                  {father.age ? ` · ${father.age} ans` : ""}
+            <p className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 sm:mt-8">
+              <span className="font-serif text-2xl text-gold-bright">{father.firstName}</span>
+              {father.nicknames.length > 0 ? (
+                <span className="flex flex-wrap items-center gap-1.5">
+                  {father.nicknames.map((nickname) => (
+                    <span
+                      key={nickname}
+                      className="rounded-full border border-gold/30 bg-gold/5 px-2.5 py-0.5 font-sans text-xs tracking-wide text-gold-bright"
+                    >
+                      {nickname}
+                    </span>
+                  ))}
                 </span>
-              </p>
-            </Reveal>
+              ) : null}
+              <span className="h-px w-8 bg-gradient-to-r from-gold to-ember" aria-hidden="true" />
+              <span className="font-sans text-sm tracking-wide text-mist">
+                {celebrationLabel}
+                {father.age
+                  ? ` · ${father.age} ans`
+                  : father.birthYear
+                    ? ` · Né en ${father.birthYear}`
+                    : ""}
+              </span>
+            </p>
 
-            <Reveal delay={0.32}>
-              <div className="mt-10 flex flex-wrap items-center gap-3">
-                <Link
-                  href={hero.primaryCta.href}
-                  className={cn(buttonVariants({ size: "lg", variant: "gold" }))}
-                >
-                  {hero.primaryCta.label}
-                </Link>
-                <Link
-                  href={hero.secondaryCta.href}
-                  className={cn(buttonVariants({ size: "lg", variant: "glass" }))}
-                >
-                  {hero.secondaryCta.label}
-                </Link>
-              </div>
-            </Reveal>
+            <div className="mt-9 flex flex-wrap items-center gap-3 sm:mt-10">
+              <Link
+                href={hero.primaryCta.href}
+                className={cn(buttonVariants({ size: "lg", variant: "gold" }))}
+              >
+                {hero.primaryCta.label}
+              </Link>
+              <Link
+                href={hero.secondaryCta.href}
+                className={cn(buttonVariants({ size: "lg", variant: "glass" }))}
+              >
+                {hero.secondaryCta.label}
+              </Link>
+            </div>
           </div>
 
-          <Reveal delay={0.18} y={36}>
+          <div className="order-first mx-auto w-full max-w-[17rem] sm:max-w-xs lg:order-none lg:max-w-md">
             <HeroPortrait initial={father.monogram ?? father.firstName.charAt(0).toUpperCase()}>
               {hero.image.src ? (
                 <MediaFrame
@@ -93,12 +92,12 @@ export function Hero({
                   ratio="tall"
                   priority
                   rounded={false}
-                  sizes="(max-width: 1024px) 90vw, 42vw"
+                  sizes="(max-width: 640px) 68vw, (max-width: 1024px) 40vw, 42vw"
                   imageClassName="hover:scale-[1.03]"
                 />
               ) : null}
             </HeroPortrait>
-          </Reveal>
+          </div>
         </div>
       </Container>
 

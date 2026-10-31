@@ -8,9 +8,12 @@ de messages — le tout dans une esthétique **sombre et raffinée** : verre
 > Le projet est **100 % frontend** : aucune base de données, aucune API, aucun
 > compte à créer. Seule variable utile : `NEXT_PUBLIC_SITE_URL`.
 
-Le contenu est livré en **démonstration, explicitement marqué « démo »** : aucun
-fait biographique, aucune photographie et aucun témoignage réel ne sont
-inventés. Tout se personnalise dans `src/content/` et `public/images/`.
+Le site est déjà personnalisé pour **Jean Paul (JPS)** : identité, date du
+**12 novembre 2026** (fuseau `Africa/Douala`), portrait du héros et **22
+photographies réelles** dans l'album. Les textes encore fictifs — frise,
+qualités, messages d'exemple — restent **explicitement marqués « démo »** tant
+que `showDemoContent` vaut `true`. Tout se personnalise dans `src/content/` et
+`public/images/`.
 
 ---
 
@@ -49,7 +52,8 @@ Une **unique page immersive** qui se déroule comme un film :
 | **Hommage vidéo** *(facultatif)* | Ne se charge qu'après un clic, `youtube-nocookie`. |
 | **Finale** | Grand panneau de verre, bouton « Joyeux anniversaire ! » qui lance une salve de confettis. |
 
-En complément : barre de progression du défilement, bouton flottant « Célébrer »,
+En complément : une courte intro « L'Ouverture » (1,8 s, bouton « Passer »),
+barre de progression du défilement, bouton flottant « Célébrer »,
 menu de navigation collant en verre, musique d'ambiance (jamais automatique),
 partage par lien.
 
@@ -101,6 +105,7 @@ npm run start   # sert le dossier statique `out/` sur http://localhost:3000
 │  │  ├─ layout.tsx              # déco de fond, confettis, navigation, footer
 │  │  ├─ page.tsx                # l'unique page (toutes les scènes)
 │  │  ├─ globals.css             # ⬅️ design system (couleurs, verre, animations)
+│  │  ├─ fonts/                  # polices auto-hébergées (next/font/local)
 │  │  ├─ not-found.tsx
 │  │  ├─ robots.ts / sitemap.ts
 │  │  └─ icon.svg
@@ -111,7 +116,7 @@ npm run start   # sert le dossier statique `out/` sur http://localhost:3000
 │  │  │                          #   letter, video, finale, scroll-cue
 │  │  ├─ messages/               # livre d'or : wall, carte, formulaire
 │  │  ├─ media/                  # cadre média + galerie/visionneuse
-│  │  ├─ layout/                 # header, footer, partage, musique
+│  │  ├─ layout/                 # header, footer, partage, musique, bandeau démo
 │  │  └─ ui/                     # primitives (bouton, carte, champ…)
 │  ├─ content/                   # ⬅️ TOUT le contenu éditorial
 │  │  ├─ site.ts                 # réglages + textes (voir plus bas)
@@ -128,7 +133,7 @@ npm run start   # sert le dossier statique `out/` sur http://localhost:3000
 │     └─ utils.ts
 ├─ public/
 │  └─ images/                    # ⬅️ vos photographies (+ README dédié)
-└─ docs/                         # guide de personnalisation
+└─ docs/                         # guide de personnalisation + audit UX/UI
 ```
 
 ---
@@ -143,18 +148,24 @@ build avec le champ fautif signalé.
 
 ```ts
 father: {
-  firstName: "Papa",          // prénom dans les titres et le héros
-  fullName: "Notre papa",
+  firstName: "Jean Paul",     // prénom dans les titres et le héros
+  fullName: "Moupefo Jean Paul",
   age: null,                  // ex. 70 pour l'afficher
   birthYear: null,
-  epithet: "L'homme qui nous a tant donné",
+  nicknames: ["JPS", "69"],
+  monogram: "M",              // lettre du grand cadre du héros
+  epithet: "L'homme qu'on appelle JPS",
 },
 
-celebrationDateTime: "2026-12-05T19:00:00", // la date de la fête
-celebrationLabel: "5 décembre 2026",
-timeZone: "Europe/Paris",                   // fuseau du compte à rebours
-showDemoContent: true,                      // false une fois vos vrais contenus en place
+celebrationDateTime: "2026-11-12T00:00:00", // la date de la fête
+celebrationLabel: "12 novembre 2026",
+timeZone: "Africa/Douala",                  // fuseau du compte à rebours
+showDemoContent: true,                      // false = retire le bandeau et les contenus démo
 ```
+
+`showDemoContent: false` masque le bandeau « Aperçu » et les messages d'exemple.
+La frise et les qualités gardent toutefois leur propre indicateur `isDemo` :
+pensez à les passer à `false` après avoir réécrit leurs textes.
 
 Chaque scène (`hero`, `story`, `qualities`, `gallery`, `messages`, `letter`,
 `video`, `music`, `finale`, `footer`) expose ses propres textes, à éditer
@@ -165,15 +176,18 @@ directement.
 ```ts
 export const timeline = [
   {
-    id: "enfance",
-    period: "1956 – 1974",
-    title: "Les premières années",
+    id: "racines",
+    period: "Le commencement",
+    title: "Des racines et une enfance",
     story: "Quelques lignes…",
-    image: { src: "/images/enfance.jpg", alt: "…" }, // facultatif
-    isDemo: true, // → false une fois le vrai contenu en place
+    image: { src: "/images/1791647282263.jpg", alt: "…" }, // facultatif
+    isDemo: true, // → false une fois le vrai récit en place
   },
 ];
 ```
+
+Les 5 étapes sont encore `isDemo: true` : seuls leurs récits restent à écrire.
+Les photographies qui les illustrent sont déjà réelles.
 
 ### 3. « Ce qui le rend unique » — `src/content/qualities.ts`
 
@@ -184,19 +198,29 @@ Chaque qualité : `title`, `narrative`, `quote` (facultatif), `isDemo`.
 ```ts
 export const gallery = [
   {
-    id: "mariage",
-    image: { src: "/images/mariage.jpg", alt: "…", caption: "…" },
-    category: "famille", // doit correspondre à un id de site.gallery.categories
-    year: "1978",
+    id: "portrait-force-tranquille",
+    image: {
+      src: "/images/1791647243618.jpg",
+      alt: "Portrait de Jean Paul",
+      caption: "La force tranquille",
+      focal: "center",
+    },
+    category: "jeunesse", // doit correspondre à un id de site.gallery.categories
+    year: "1978",         // facultatif
     isDemo: false,
   },
 ];
 ```
 
+L'album contient déjà **22 photographies réelles**, réparties entre `jeunesse`,
+`famille`, `moments` et `celebrations`.
+
 ### 5. Les images
 
-Déposez vos fichiers dans `public/images/` puis référencez-les en `/images/…`.
-Détails dans `public/images/README.md`. Tant que `src` vaut `null`, un **cadre de
+L'album, le héros, la finale et la frise pointent déjà vers de vraies
+photographies de `public/images/`. Pour en ajouter, déposez vos fichiers dans ce
+dossier puis référencez-les en `/images/…`. Détails dans
+`public/images/README.md`. Tant que `src` vaut `null`, un **cadre de
 remplacement** élégant s'affiche — jamais d'image inventée.
 
 ### 6. La lettre, la vidéo, la musique
@@ -278,7 +302,8 @@ Copiez `.env.example` en `.env.local` si besoin. Aucune clé n'est requise.
 - Page entièrement **statique** (générée au build), aucune requête au serveur.
 - Révélations et halos en `will-change`/`transform` uniquement.
 - Images servies depuis `public/` (déjà optimisées en amont, aucun re-traitement au run).
-- Polices auto-hébergées via `next/font`.
+- Polices auto-hébergées dans `src/app/fonts/` via `next/font/local` : le build
+  ne dépend d'aucun accès réseau.
 
 ---
 
@@ -321,6 +346,9 @@ plateforme ne lit pas `_headers`, reportez-y manuellement les en-têtes attendus
 - **Livre d'or local** : les messages ne sont pas partagés entre visiteurs ni
   persistés côté serveur — c'est un choix frontend assumé, indiqué dans
   l'interface.
+- **Contenus de démonstration** : la frise, les qualités et les messages
+  d'exemple restent marqués « démo » tant que `showDemoContent` vaut `true`.
+  Voir `docs/audit-ux-ui.md` pour le suivi des finitions UX/UI.
 - **Confettis & halo** : désactivés lorsque l'utilisateur demande un mouvement
   réduit (`prefers-reduced-motion`), et le halo seulement sur les appareils à
   pointeur fin.
@@ -336,7 +364,8 @@ plateforme ne lit pas `_headers`, reportez-y manuellement les en-têtes attendus
 
 - **Palette, verre, animations** : `src/app/globals.css` (couleurs `@theme`,
   utilitaires `glass`, `text-shine`, keyframes).
-- **Polices** : `src/app/layout.tsx` (`next/font`) puis variables CSS.
+- **Polices** : `src/app/layout.tsx` (`next/font/local`), fichiers dans
+  `src/app/fonts/`, puis variables CSS.
 - **Effets** : `src/components/fx/` (confettis, fond, halos).
 - **Guide pas-à-pas** : `docs/personnalisation.md`.
 

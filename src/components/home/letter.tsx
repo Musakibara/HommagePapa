@@ -13,7 +13,7 @@ export function CentralLetter() {
   const { letter } = site;
 
   return (
-    <Section id="hommage">
+    <Section id="hommage" data-calm>
       <Container>
         <div className="mx-auto max-w-3xl">
           <Reveal className="text-center">

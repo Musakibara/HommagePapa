@@ -15,13 +15,14 @@ courantes.
 - [ ] **Identité** (`src/content/site.ts`)
   - [ ] `father.firstName`, `father.fullName`, `father.epithet`
   - [ ] `father.age` / `father.birthYear` (ou `null`)
+  - [ ] `father.nicknames` et `father.monogram`
   - [ ] `siteName`, `siteTagline`, `description`
 - [ ] **Date** — `celebrationDateTime` + `celebrationLabel` + `timeZone`
 - [ ] **Textes** — héros, intro de chaque section, lettre, finale, pied de page
 - [ ] **Histoire** (`timeline.ts`) — remplacer les étapes et passer `isDemo` à `false`
 - [ ] **Qualités** (`qualities.ts`) — idem
-- [ ] **Album** (`gallery.ts`) — déposer les images dans `public/images/`, renseigner
-      `src`/`alt` et la `category`
+- [ ] **Album** (`gallery.ts`) — les 22 photos sont déjà en place ; vérifier les
+      `alt`/`caption` et ajouter les nouvelles images dans `public/images/`
 - [ ] **Vidéo** — `video.enabled` + `youtubeId` **ou** `fileSrc` (avec consentement)
 - [ ] **Musique** — `music.enabled` + `src` (jamais de lecture automatique)
 - [ ] **`showDemoContent: false`** dans `site.ts`
@@ -94,8 +95,10 @@ de partage.
 
 ### Passer en police différente
 
-Toujours via `next/font` dans `src/app/layout.tsx`, puis exposez la variable CSS
-utilisée par `@theme` dans `globals.css` (`--font-sans`, `--font-serif`).
+Toujours via `next/font` dans `src/app/layout.tsx`. Le site utilise
+`next/font/local` avec les fichiers de `src/app/fonts/` ; exposez ensuite la
+variable CSS utilisée par `@theme` dans `globals.css` (`--font-sans`,
+`--font-serif`).
 
 ### Vider le livre d'or local (test)
 

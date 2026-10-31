@@ -3,10 +3,9 @@
 import { useEffect } from "react";
 
 /**
- * Sur un site « une seule page », un rechargement doit ramener en haut de
- * page (première section). Sans ce composant, le navigateur restaure
- * l'ancienne position de défilement et, si une ancre (`#histoire`,
- * `#souvenirs`, …) traîne dans l'URL, y recale la vue avec un décalage.
+ * Sur un site « une seule page », un rechargement sans ancre doit ramener en
+ * haut de page. En revanche, un lien profond (`/#messages`, `/#histoire`) doit
+ * rester fonctionnel : on ne supprime jamais le hash de l'URL.
  */
 export function ScrollReset() {
   useEffect(() => {
@@ -15,17 +14,16 @@ export function ScrollReset() {
       window.history.scrollRestoration = "manual";
     }
 
-    // Retire l'ancre de l'URL pour que le rechargement démarre sur le héros.
-    if (window.location.hash) {
-      window.history.replaceState(
-        null,
-        "",
-        window.location.pathname + window.location.search,
-      );
+    const hash = window.location.hash;
+    if (hash) {
+      const id = decodeURIComponent(hash.slice(1));
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ block: "start" });
+      });
+      return;
     }
 
-    // Filet de sécurité : toujours se poser tout en haut.
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, []);
 
   return null;

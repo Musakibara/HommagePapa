@@ -38,17 +38,22 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
   const lastFocusedRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
+  const displayItems = useMemo(() => items.filter((item) => Boolean(item.src)), [items]);
+
   const filtered = useMemo(
     () =>
       activeCategory === "all"
-        ? items
-        : items.filter((item) => item.category === activeCategory),
-    [items, activeCategory],
+        ? displayItems
+        : displayItems.filter((item) => item.category === activeCategory),
+    [displayItems, activeCategory],
   );
 
   const usedCategories = useMemo(
-    () => categories.filter((category) => items.some((item) => item.category === category.id)),
-    [categories, items],
+    () =>
+      categories.filter((category) =>
+        displayItems.some((item) => item.category === category.id),
+      ),
+    [categories, displayItems],
   );
 
   const close = useCallback(() => setOpenIndex(null), []);
@@ -131,12 +136,7 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
       <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         {filtered.map((item, index) => (
           <li key={item.id}>
-            <button
-              type="button"
-              onClick={() => setOpenIndex(index)}
-              className="group relative block w-full overflow-hidden rounded-[var(--radius-card)] text-left"
-              aria-label={`Agrandir : ${item.alt}`}
-            >
+            <div className="group relative overflow-hidden rounded-[var(--radius-card)]">
               <MediaFrame
                 image={{ src: item.src, alt: item.alt, focal: item.focal }}
                 ratio="portrait"
@@ -144,23 +144,29 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
                 rounded={false}
                 imageClassName="group-hover:scale-[1.06]"
               />
+              <button
+                type="button"
+                onClick={() => setOpenIndex(index)}
+                className="absolute inset-0 z-10 cursor-zoom-in rounded-[var(--radius-card)] focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-void"
+                aria-label={`Agrandir : ${item.alt}`}
+              />
               <span
                 aria-hidden="true"
-                className="absolute inset-0 flex items-center justify-center bg-void/0 opacity-0 transition-all duration-500 group-hover:bg-void/45 group-hover:opacity-100"
+                className="pointer-events-none absolute inset-0 flex items-center justify-center bg-void/0 opacity-0 transition-all duration-500 group-hover:bg-void/45 group-hover:opacity-100"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/60 text-gold-bright backdrop-blur-sm">
                   <Expand className="h-4 w-4" />
                 </span>
               </span>
-              {item.caption || item.year ? (
-                <span className="mt-2 flex items-baseline gap-2 px-1 font-sans text-xs text-mist">
-                  {item.year ? (
-                    <span className="tabular-nums text-gold">{item.year}</span>
-                  ) : null}
-                  {item.caption ? <span className="line-clamp-1">{item.caption}</span> : null}
-                </span>
-              ) : null}
-            </button>
+            </div>
+            {item.caption || item.year ? (
+              <p className="mt-2 flex items-baseline gap-2 px-1 font-sans text-xs text-mist">
+                {item.year ? (
+                  <span className="tabular-nums text-gold">{item.year}</span>
+                ) : null}
+                {item.caption ? <span className="line-clamp-1">{item.caption}</span> : null}
+              </p>
+            ) : null}
           </li>
         ))}
       </ul>
@@ -171,7 +177,11 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
             className="fixed inset-0 z-[100] flex flex-col bg-void/95 backdrop-blur-xl"
             role="dialog"
             aria-modal="true"
-            aria-label="Photographie agrandie"
+            aria-label={
+              current.caption
+                ? `Photographie agrandie : ${current.caption}`
+                : "Photographie agrandie"
+            }
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -182,7 +192,11 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
               className="flex items-center justify-between px-4 py-4 sm:px-8"
               onClick={(event) => event.stopPropagation()}
             >
-              <p className="font-sans text-sm tabular-nums text-mist">
+              <p
+                className="font-sans text-sm tabular-nums text-mist"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 {(openIndex ?? 0) + 1} / {filtered.length}
               </p>
               <button
@@ -197,15 +211,15 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
               </button>
             </div>
 
-            <div
-              className="relative flex flex-1 items-center justify-center px-4 pb-6 sm:px-8"
-              onClick={(event) => event.stopPropagation()}
-            >
+            <div className="relative flex flex-1 items-center justify-center px-4 pb-6 sm:px-8">
               {filtered.length > 1 ? (
                 <button
                   type="button"
                   data-lightbox-focusable
-                  onClick={() => go(-1)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    go(-1);
+                  }}
                   className="absolute left-2 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-void/50 text-ivory backdrop-blur-sm transition-colors hover:border-gold/50 hover:bg-white/10 sm:left-6"
                   aria-label="Photographie précédente"
                 >
@@ -219,6 +233,7 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className="relative h-[68vh] w-full max-w-5xl overflow-hidden rounded-[var(--radius-card)] bg-coal"
+                onClick={(event) => event.stopPropagation()}
               >
                 <MediaFrame
                   image={{
@@ -239,7 +254,10 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
                 <button
                   type="button"
                   data-lightbox-focusable
-                  onClick={() => go(1)}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    go(1);
+                  }}
                   className="absolute right-2 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-void/50 text-ivory backdrop-blur-sm transition-colors hover:border-gold/50 hover:bg-white/10 sm:right-6"
                   aria-label="Photographie suivante"
                 >

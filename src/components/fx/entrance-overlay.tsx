@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 const STORAGE_KEY = "hp:intro-seen";
 
 /** Durée pendant laquelle l'intro reste à l'écran avant la levée du rideau. */
-const HOLD_MS = 2350;
+const HOLD_MS = 1800;
 
 /** Durée de la levée du rideau. */
-const EXIT_MS = 950;
+const EXIT_MS = 900;
 
 const RING_RADIUS = 92;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
@@ -44,6 +44,7 @@ export function EntranceOverlay({
   monogram,
 }: EntranceOverlayProps) {
   const [phase, setPhase] = useState<Phase>("idle");
+  const skipRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -68,6 +69,7 @@ export function EntranceOverlay({
 
   useEffect(() => {
     if (phase !== "active") return;
+    skipRef.current?.focus();
     const timer = window.setTimeout(() => setPhase("exiting"), HOLD_MS);
     return () => window.clearTimeout(timer);
   }, [phase]);
@@ -83,12 +85,23 @@ export function EntranceOverlay({
   }, []);
 
   useEffect(() => {
+    if (phase !== "active" && phase !== "exiting") return;
+
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") skip();
+      if (event.key === "Escape") {
+        skip();
+        return;
+      }
+      // L'intro est modale : on garde le focus sur « Passer » tant qu'elle
+      // couvre la page, pour éviter d'atteindre le contenu en dessous.
+      if (event.key === "Tab") {
+        event.preventDefault();
+        skipRef.current?.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [skip]);
+  }, [phase, skip]);
 
   if (phase === "done") return null;
 
@@ -105,8 +118,9 @@ export function EntranceOverlay({
         phase === "exiting" && "is-exiting",
       )}
       onPointerDown={skip}
-      role="presentation"
-      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Introduction du site"
       data-intro
     >
       {phase !== "idle" ? (
@@ -174,6 +188,19 @@ export function EntranceOverlay({
       ) : null}
 
       <div className="entrance-ember" aria-hidden="true" />
+
+      {phase === "active" ? (
+        <button
+          ref={skipRef}
+          type="button"
+          onClick={skip}
+          onPointerDown={(event) => event.stopPropagation()}
+          className="absolute bottom-7 left-1/2 inline-flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/15 bg-void/40 px-4 py-2 font-sans text-[0.68rem] uppercase tracking-[0.2em] text-mist backdrop-blur-sm transition-colors hover:border-gold/50 hover:text-gold-bright sm:bottom-10"
+        >
+          Passer l&apos;introduction
+          <span aria-hidden="true">→</span>
+        </button>
+      ) : null}
     </div>
   );
 }

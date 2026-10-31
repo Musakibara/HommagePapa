@@ -59,20 +59,18 @@ export const siteConfig = {
   nav: [
     { label: "Son histoire", href: "#histoire" },
     { label: "L'album", href: "#souvenirs" },
-    { label: "Le livre d'or", href: "#messages" },
+    { label: "La lettre", href: "#hommage" },
     { label: "Lui écrire", href: "#laisser-un-message" },
   ],
 
   hero: {
-    // « fullscreen » : photo plein écran. « editorial » : image et texte côte à côte.
-    variant: "fullscreen",
     eyebrow: "Une célébration de la vie",
     title: "À l'homme qui nous a tant donné",
     subtitle:
       "Quelques pages pour te dire merci : pour tes sacrifices discrets, tes conseils patients et l'amour que tu n'as jamais cessé de nous offrir.",
     image: {
-      src: null, // ex. "/images/papa-portrait.jpg"
-      alt: "Portrait de papa — emplacement à remplacer par une photographie",
+      src: "/images/1791647243618.jpg",
+      alt: "Portrait de Jean Paul",
       focal: "center",
     },
     primaryCta: { label: "Découvrir son histoire", href: "#histoire" },
@@ -98,7 +96,7 @@ export const siteConfig = {
     eyebrow: "Album de famille",
     title: "Souvenirs en images",
     intro:
-      "Quelques instants choisis. Remplacez les cadres par vos photographies : elles vivront ici, à leur juste place.",
+      "Quelques instants choisis, à travers les années. Les photographies de famille sont réunies ici, à leur juste place.",
     emptyTitle: "L'album attend vos images",
     emptyBody:
       "Ajoutez vos photographies dans public/images/ puis référencez-les dans src/content/gallery.ts.",
@@ -112,23 +110,23 @@ export const siteConfig = {
   },
 
   messages: {
-    eyebrow: "Les mots du cœur",
-    title: "Ce que tes proches ont à te dire",
+    eyebrow: "Livre d'or",
+    title: "Les mots du cœur",
     intro:
-      "Ils ont déposé un peu de leur cœur ici. Ajoutez le vôtre : votre message apparaît aussitôt, rien qu'à vous.",
-    wallTitle: "Le livre d'or",
+      "Laissez un mot à Papa. Il s'affiche ici, sur votre appareil, et vous pouvez l'envoyer à la famille en un clic.",
+    wallTitle: "Vos mots pour Papa",
     emptyTitle: "Aucun message pour l'instant",
     emptyBody: "Soyez la première personne à lui écrire quelques mots.",
     formTitle: "Laisse-lui un message",
     formIntro:
       "Quelques lignes suffisent. Prenez le temps de lui dire ce que vous avez sur le cœur.",
-    consentLabel: "Je souhaite afficher mon message sur le mur du livre d'or.",
+    consentLabel: "J'accepte que ce message soit enregistré sur cet appareil.",
     moderationNotice:
-      "Votre message s'affiche instantanément, uniquement dans ce navigateur. Aucune donnée n'est envoyée : rien ne quitte votre appareil.",
+      "Votre message reste sur cet appareil. Pour qu'il arrive à Papa, envoyez-le à la famille avec WhatsApp ou copiez-le.",
     successTitle: "Merci du fond du cœur",
     demoNotice:
       "Les messages ci-dessous sont des exemples de démonstration : il ne s'agit pas de véritables témoignages.",
-    pageSize: 9,
+    pageSize: 12,
   },
 
   letter: {
@@ -172,8 +170,8 @@ export const siteConfig = {
     message:
       "Merci pour tout, Jean Paul. Que cette journée te ressemble : chaleureuse, généreuse et pleine de ceux qui t'aiment.",
     image: {
-      src: null,
-      alt: "Photographie de famille — emplacement à remplacer",
+      src: "/images/IMG-20261025-WA0020.jpg",
+      alt: "Jean Paul entouré des siens",
       focal: "center",
     },
     primaryCta: { label: "Lui écrire un mot", href: "#laisser-un-message" },

@@ -26,7 +26,7 @@
   /* --- Neutres ----------------------------------------------------------- */
   --color-ivory: #f7f2e8;
   --color-mist: #b3afa7;
-  --color-mist-soft: #85827b;
+  --color-mist-soft: #9c988f;
 
   /* --- Typographie ------------------------------------------------------- */
   --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman",
@@ -132,7 +132,6 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 7rem;
     -webkit-text-size-adjust: 100%;
     color-scheme: dark;
   }
@@ -258,7 +257,8 @@
   );
 }
 
-/* Texte en dégradé or → braise. */
+/* Texte en dégradé or → braise. Le fallback reste lisible si le navigateur
+   ne supporte pas le texte découpé, ou en mode contraste forcé. */
 @utility text-shine {
   background-image: linear-gradient(
     100deg,
@@ -268,10 +268,41 @@
     var(--color-gold-bright)
   );
   background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--color-gold-bright);
   animation: hp-shimmer 8s linear infinite;
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Variante figée, pour les grands titres : même dégradé, sans scintillement. */
+@utility text-shine-static {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-bright),
+    var(--color-gold) 32%,
+    var(--color-ember-soft) 62%,
+    var(--color-gold-bright)
+  );
+  color: var(--color-gold-bright);
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
+@media (forced-colors: active) {
+  .text-shine,
+  .text-shine-static {
+    background-image: none;
+    color: CanvasText;
+    -webkit-text-fill-color: currentColor;
+  }
 }
 
 /* Halo doré. */
@@ -291,12 +322,44 @@
       box-shadow 0.5s var(--ease-out-expo);
   }
 
-  .card-interactive:hover {
-    transform: translateY(-6px);
-    border-color: rgba(230, 194, 122, 0.4);
-    box-shadow:
-      0 40px 80px -40px rgba(0, 0, 0, 0.95),
-      0 0 40px -18px rgba(255, 122, 69, 0.5);
+  @media (hover: hover) and (pointer: fine) {
+    .card-interactive:hover {
+      transform: translateY(-6px);
+      border-color: rgba(230, 194, 122, 0.4);
+      box-shadow:
+        0 40px 80px -40px rgba(0, 0, 0, 0.95),
+        0 0 40px -18px rgba(255, 122, 69, 0.5);
+    }
+  }
+
+  /* Révélation progressive, sans cacher le contenu si JS est absent.
+     `scripting: enabled` n'est pas supporté partout : dans ce cas la règle
+     est ignorée et le contenu reste immédiatement visible. */
+  @media (scripting: enabled) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(var(--reveal-y, 24px));
+      transition:
+        opacity var(--reveal-duration, 0.7s) var(--ease-out-expo)
+          var(--reveal-delay, 0s),
+        transform var(--reveal-duration, 0.7s) var(--ease-out-expo)
+          var(--reveal-delay, 0s);
+      will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      will-change: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }
 
@@ -530,6 +593,46 @@
 
 @media (prefers-reduced-motion: reduce) {
   .entrance-overlay {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Allègements pour les petits écrans
+   --------------------------------------------------------------------------
+   Les halos animés, les braises et les flous de verre coûtent cher au GPU des
+   téléphones d'entrée de gamme. On fige les halos, on réduit les braises et
+   le flou tout en gardant l'ambiance.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .backdrop-halo {
+    animation: none !important;
+    opacity: 0.28 !important;
+    filter: blur(80px) !important;
+  }
+
+  .backdrop-ember:nth-of-type(n + 6) {
+    display: none;
+  }
+
+  .glass {
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+  }
+
+  .glass-card {
+    backdrop-filter: blur(8px) saturate(130%);
+    -webkit-backdrop-filter: blur(8px) saturate(130%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop-halo {
+    animation: none !important;
+  }
+
+  .backdrop-ember {
     display: none;
   }
 }

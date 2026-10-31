@@ -11,7 +11,7 @@ export function Finale() {
   const { finale, father, celebrationLabel } = site;
 
   return (
-    <Section id="conclusion" className="pb-32">
+    <Section id="conclusion" className="pb-32" data-calm>
       <Container>
         <Reveal>
           <div className="glass relative overflow-hidden rounded-[var(--radius-panel)] px-6 py-16 sm:px-14 sm:py-24">
@@ -27,7 +27,12 @@ export function Finale() {
               style={{ background: "radial-gradient(circle, rgba(255,122,69,0.55), transparent)" }}
             />
 
-            <div className="relative grid items-center gap-12 lg:grid-cols-[1fr_0.75fr]">
+            <div
+              className={cn(
+                "relative grid items-center gap-12",
+                finale.image.src && "lg:grid-cols-[1fr_0.75fr]",
+              )}
+            >
               <div className="text-center lg:text-left">
                 <span className="rule-gold mx-auto w-16 lg:mx-0" aria-hidden="true" />
                 <h2 className="text-shine mt-7 font-serif text-3xl leading-tight sm:text-4xl md:text-[3rem]">
@@ -41,13 +46,13 @@ export function Finale() {
                 </p>
 
                 <div className="mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-                  <BurstButton label="Joyeux anniversaire !" />
                   <Link
                     href={finale.primaryCta.href}
-                    className={cn(buttonVariants({ size: "lg", variant: "glass" }))}
+                    className={cn(buttonVariants({ size: "lg", variant: "gold" }))}
                   >
                     {finale.primaryCta.label}
                   </Link>
+                  <BurstButton label="Joyeux anniversaire !" variant="glass" />
                   <Link
                     href={finale.secondaryCta.href}
                     className={cn(buttonVariants({ size: "lg", variant: "ghost" }))}
@@ -57,13 +62,15 @@ export function Finale() {
                 </div>
               </div>
 
-              <div className="mx-auto w-full max-w-sm">
-                <MediaFrame
-                  image={finale.image}
-                  ratio="portrait"
-                  sizes="(max-width: 1024px) 80vw, 30vw"
-                />
-              </div>
+              {finale.image.src ? (
+                <div className="mx-auto w-full max-w-sm">
+                  <MediaFrame
+                    image={finale.image}
+                    ratio="portrait"
+                    sizes="(max-width: 1024px) 80vw, 30vw"
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         </Reveal>

@@ -18,8 +18,8 @@ export const timeline = [
     story:
       "Le point de départ de son histoire : un lieu, une famille, des années qui ont forgé son caractère. À compléter avec vos souvenirs.",
     image: {
-      src: null,
-      alt: "Photographie d'enfance — emplacement à remplacer",
+      src: "/images/1791647282263.jpg",
+      alt: "Portrait de Jean Paul",
       focal: "center",
     },
     isDemo: true,
@@ -31,8 +31,8 @@ export const timeline = [
     story:
       "L'entrée dans la vie active, les choix courageux, les efforts discrets qui ne se voyaient pas mais qui ont tout porté.",
     image: {
-      src: null,
-      alt: "Photographie de jeunesse — emplacement à remplacer",
+      src: "/images/1791647515783.jpg",
+      alt: "Souvenir de jeunesse de Jean Paul",
       focal: "center",
     },
     isDemo: true,
@@ -43,6 +43,11 @@ export const timeline = [
     title: "Un foyer construit jour après jour",
     story:
       "Le moment où sa vie s'est remplie d'autres voix que la sienne. Les repas, les rires, les nuits sans sommeil, et tant d'amour donné sans compter.",
+    image: {
+      src: "/images/1791647507469.jpg",
+      alt: "La famille réunie autour de Jean Paul",
+      focal: "center",
+    },
     isDemo: true,
   },
   {
@@ -51,6 +56,11 @@ export const timeline = [
     title: "Un travail accompli avec honneur",
     story:
       "Des années de labeur, de patience et de fierté discrète. Ce qu'il a bâti de ses mains raconte sa droiture mieux que les mots.",
+    image: {
+      src: "/images/1791647551286.jpg",
+      alt: "Un moment de fête en famille",
+      focal: "center",
+    },
     isDemo: true,
   },
   {
@@ -59,6 +69,11 @@ export const timeline = [
     title: "Ce qu'il transmet encore",
     story:
       "Les conseils, la présence, la manière de traverser les saisons. Son plus bel héritage n'est pas matériel : c'est ce qu'il a semé en nous.",
+    image: {
+      src: "/images/IMG-20261025-WA0022.jpg",
+      alt: "Jean Paul avec un proche",
+      focal: "center",
+    },
     isDemo: true,
   },
 ] satisfies TimelineEventInput[];

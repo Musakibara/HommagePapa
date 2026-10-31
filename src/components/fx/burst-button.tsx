@@ -9,15 +9,17 @@ import { cn } from "@/lib/utils";
 export function BurstButton({
   label,
   className,
+  variant = "gold",
 }: {
   label: string;
   className?: string;
+  variant?: "gold" | "glass" | "outline" | "ghost";
 }) {
   return (
     <button
       type="button"
       onClick={() => celebrate({ count: 240 })}
-      className={cn(buttonVariants({ variant: "gold", size: "lg" }), className)}
+      className={cn(buttonVariants({ variant, size: "lg" }), className)}
     >
       <PartyPopper className="h-4 w-4" aria-hidden="true" />
       {label}

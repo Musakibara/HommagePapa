@@ -48,7 +48,6 @@ export const sectionToggleSchema = z.object({
 });
 
 export const heroSchema = z.object({
-  variant: z.enum(["fullscreen", "editorial"]).default("fullscreen"),
   eyebrow: z.string(),
   title: z.string(),
   subtitle: z.string(),
