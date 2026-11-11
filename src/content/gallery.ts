@@ -211,7 +211,7 @@ export const gallery = [
   {
     id: "souvenir-18",
     image: {
-      src: "/images/2d194e74-c412-4da1-b14c-3bc3ff962c8d.png",
+      src: "/images/2d194e74-c412-4da1-b14c-3bc3ff962c8d.jpg",
       alt: "Jean Paul et un proche",
       caption: "Un regard complice",
       focal: "center",
@@ -222,7 +222,7 @@ export const gallery = [
   {
     id: "souvenir-19",
     image: {
-      src: "/images/8a3c4392-c1ca-4903-b110-de90c01cdea8.png",
+      src: "/images/8a3c4392-c1ca-4903-b110-de90c01cdea8.jpg",
       alt: "Portrait de Jean Paul",
       caption: "Tel qu'il est aujourd'hui",
       focal: "center",
@@ -233,7 +233,7 @@ export const gallery = [
   {
     id: "souvenir-20",
     image: {
-      src: "/images/928c996c-3c3a-4c34-ae14-430fdb3572c4.png",
+      src: "/images/928c996c-3c3a-4c34-ae14-430fdb3572c4.jpg",
       alt: "Portrait de Jean Paul",
       caption: "Une présence lumineuse",
       focal: "center",
@@ -255,7 +255,7 @@ export const gallery = [
   {
     id: "souvenir-22",
     image: {
-      src: "/images/1315e4d8-de77-4b5c-b816-d37a8d7e5136.png",
+      src: "/images/1315e4d8-de77-4b5c-b816-d37a8d7e5136.jpg",
       alt: "Jean Paul et un proche",
       caption: "Un souvenir précieux",
       focal: "center",

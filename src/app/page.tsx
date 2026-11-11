@@ -1,4 +1,4 @@
-import { demoMessages, galleryItems, site } from "@/content";
+import { openingMessages, galleryItems, site } from "@/content";
 import { zonedTimeToInstant } from "@/lib/datetime";
 import { Container, Section, SectionHeading } from "@/components/ui/section";
 import { Countdown } from "@/components/home/countdown";
@@ -93,8 +93,7 @@ function MessagesSection() {
             copy={site.messages}
             locale={site.locale}
             timeZone={site.timeZone}
-            showDemo={site.showDemoContent}
-            demoMessages={demoMessages}
+            openingMessages={openingMessages}
             fatherName={site.father.firstName}
           />
         </div>

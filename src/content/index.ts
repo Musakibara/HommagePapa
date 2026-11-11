@@ -38,5 +38,5 @@ export const timelineEvents = content.timeline;
 export const qualityList = content.qualities;
 export const galleryItems = content.gallery;
 
-export { demoMessages, type DemoMessage } from "./demo-messages";
+export { openingMessages, type OpeningMessage } from "./opening-messages";
 export * from "./schema";

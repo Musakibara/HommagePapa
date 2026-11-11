@@ -89,8 +89,8 @@ export function Hero({
               {hero.image.src ? (
                 <MediaFrame
                   image={hero.image}
-                  ratio="tall"
-                  priority
+                  ratio="photo"
+                  eager
                   rounded={false}
                   sizes="(max-width: 640px) 68vw, (max-width: 1024px) 40vw, 42vw"
                   imageClassName="hover:scale-[1.03]"

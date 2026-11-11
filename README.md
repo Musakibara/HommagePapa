@@ -123,7 +123,7 @@ npm run start   # sert le dossier statique `out/` sur http://localhost:3000
 │  │  ├─ timeline.ts             # frise « Son histoire »
 │  │  ├─ qualities.ts            # « Ce qui le rend unique »
 │  │  ├─ gallery.ts              # album
-│  │  ├─ demo-messages.ts        # messages d'exemple (marqués « démo »)
+│  │  ├─ opening-messages.ts     # messages d'ouverture du livre d'or
 │  │  ├─ schema.ts               # schémas Zod de validation du contenu
 │  │  └─ index.ts
 │  └─ lib/

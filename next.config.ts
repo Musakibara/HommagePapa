@@ -20,6 +20,18 @@ const nextConfig: NextConfig = {
     // (déjà optimisées par l'auteur), sans serveur d'optimisation.
     unoptimized: true,
   },
+  experimental: {
+    // Le serveur de développement Turbopack peut gonfler en mémoire sur les
+    // longues sessions (`FATAL ERROR: Zone Allocation failed`). Le ramasse-
+    // miettes libère la mémoire du cache persistant devenu inutile.
+    turbopackGc: true,
+    // Next.js 16.4.0 active par défaut une relance « sécurité » qui fait
+    // échouer le premier `next build` (code de sortie 1, `SecurityFatalError`)
+    // avant de réussir au second essai. Sur une intégration continue (Netlify),
+    // ce premier échec fait échouer le déploiement. Ce site étant un export
+    // statique sans serveur ni base de données, on désactive cette relance.
+    agentUpgrade: false,
+  },
 };
 
 export default nextConfig;

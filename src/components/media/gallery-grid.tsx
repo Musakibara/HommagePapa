@@ -244,6 +244,7 @@ export function GalleryGrid({ items, categories, className }: GalleryGridProps) 
                     credit: current.credit,
                   }}
                   ratio="fill"
+                  fit="contain"
                   rounded={false}
                   sizes="(max-width: 1024px) 100vw, 1024px"
                   placeholderLabel="Photographie à ajouter"

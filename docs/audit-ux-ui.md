@@ -118,7 +118,7 @@ reste relève de la finition.
 - **Constat** : `showDemoContent: true`, timeline générique, messages factices →
   on lit « Démo — à remplacer » et des portraits vides.
 - **Preuve** : `src/content/site.ts`, `src/content/timeline.ts`,
-  `src/content/demo-messages.ts`.
+  `src/content/opening-messages.ts`.
 - **Correction** : garde-fou avant diffusion (bandeau de build ou
   `showDemoContent: false` par défaut) pour ne jamais montrer ça à la famille.
 

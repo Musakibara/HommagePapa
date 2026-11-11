@@ -3,9 +3,10 @@
 import { useSyncExternalStore } from "react";
 import { MessageSquareText } from "lucide-react";
 import type { MessagesCopy } from "@/content/schema";
-import type { DemoMessage } from "@/content/demo-messages";
+import type { OpeningMessage } from "@/content/opening-messages";
 import {
   loadGuestbook,
+  loadGuestbookServerSnapshot,
   removeGuestbookEntry,
   subscribeGuestbook,
   type GuestbookEntry,
@@ -17,32 +18,33 @@ interface GuestbookProps {
   copy: MessagesCopy;
   locale: string;
   timeZone: string;
-  showDemo: boolean;
-  demoMessages: DemoMessage[];
+  openingMessages: OpeningMessage[];
   fatherName: string;
 }
 
 /**
- * Livre d'or : messages intégrés + messages ajoutés localement par le visiteur.
- * Tout se passe dans le navigateur (localStorage) — aucun backend.
- * `useSyncExternalStore` synchronise l'état avec le stockage local sans effet.
+ * Livre d'or : messages d'ouverture (déjà déposés pour Papa) + messages ajoutés
+ * localement par le visiteur. Tout se passe dans le navigateur (localStorage) —
+ * aucun backend. `useSyncExternalStore` synchronise l'état avec le stockage
+ * local sans effet.
  */
 export function Guestbook({
   copy,
   locale,
   timeZone,
-  showDemo,
-  demoMessages,
+  openingMessages,
   fatherName,
 }: GuestbookProps) {
   const entries = useSyncExternalStore<GuestbookEntry[]>(
     subscribeGuestbook,
     loadGuestbook,
-    loadGuestbook,
+    loadGuestbookServerSnapshot,
   );
 
-  const showDemoCards = showDemo && demoMessages.length > 0;
-  const isEmpty = entries.length === 0 && !showDemoCards;
+  // Les messages d'ouverture ne s'affichent que sur un mur encore vierge, pour
+  // ne pas se mêler aux messages écrits depuis cet appareil.
+  const showOpening = entries.length === 0 && openingMessages.length > 0;
+  const isEmpty = entries.length === 0 && !showOpening;
 
   const handleRemove = (id: string) => {
     removeGuestbookEntry(id);
@@ -60,9 +62,9 @@ export function Guestbook({
           ) : null}
         </div>
 
-        {showDemoCards ? (
+        {showOpening ? (
           <p className="mb-8 max-w-2xl font-sans text-sm leading-relaxed text-mist">
-            {copy.demoNotice}
+            {copy.wallNotice}
           </p>
         ) : null}
 
@@ -83,14 +85,13 @@ export function Guestbook({
                 onRemove={() => handleRemove(entry.id)}
               />
             ))}
-            {showDemoCards
-              ? demoMessages.map((message) => (
+            {showOpening
+              ? openingMessages.map((message) => (
                   <MessageCard
                     key={message.id}
                     message={{ ...message, createdAt: "" }}
                     locale={locale}
                     timeZone={timeZone}
-                    isDemo
                   />
                 ))
               : null}

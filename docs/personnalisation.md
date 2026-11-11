@@ -114,7 +114,7 @@ dans le `localStorage` du navigateur. Pour un état vierge :
 
 | Je veux… | Fichier |
 | --- | --- |
-| Changer un texte visible | `src/content/site.ts` (+ `timeline.ts`, `qualities.ts`, `gallery.ts`, `demo-messages.ts`) |
+| Changer un texte visible | `src/content/site.ts` (+ `timeline.ts`, `qualities.ts`, `gallery.ts`, `opening-messages.ts`) |
 | Changer une couleur / police / le verre | `src/app/globals.css`, `src/app/layout.tsx` |
 | Changer une règle de formulaire du livre d'or | `src/lib/guestbook.ts` (schéma `guestbookSchema`) |
 | Changer les confettis ou le fond animé | `src/components/fx/` |

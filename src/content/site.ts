@@ -25,9 +25,9 @@ export const siteConfig = {
   celebrationDateTime: "2026-11-12T00:00:00",
   celebrationLabel: "12 novembre 2026",
 
-  // Affiche les contenus explicitement marqués « démonstration ».
-  // Passez à `false` une fois vos vrais contenus en place.
-  showDemoContent: true,
+  // Affiche les contenus explicitement marqués « démonstration » (bandeau
+  // « Aperçu » et badges « démo »). Désactivé : le site est prêt à être publié.
+  showDemoContent: false,
 
   father: {
     // Prénom affiché dans les titres. Remplacez par son vrai prénom.
@@ -69,9 +69,11 @@ export const siteConfig = {
     subtitle:
       "Quelques pages pour te dire merci : pour tes sacrifices discrets, tes conseils patients et l'amour que tu n'as jamais cessé de nous offrir.",
     image: {
-      src: "/images/1791647243618.jpg",
+      src: "/images/Hero.jpg",
       alt: "Portrait de Jean Paul",
       focal: "center",
+      // Photo verticale 2:3 : cadre d'affichage identique à la source.
+      ratio: "photo",
     },
     primaryCta: { label: "Découvrir son histoire", href: "#histoire" },
     secondaryCta: { label: "Lui laisser un message", href: "#laisser-un-message" },
@@ -82,14 +84,14 @@ export const siteConfig = {
     eyebrow: "Son histoire",
     title: "Une vie, mille raisons d'être fier",
     intro:
-      "Des premières années aux jours d'aujourd'hui, voici quelques repères. Remplacez ces repères de démonstration par vos vrais souvenirs.",
+      "Des premières années aux jours d'aujourd'hui, voici quelques repères d'une vie menée avec droiture. Chaque étape raconte un peu de l'homme que nous aimons.",
   },
 
   qualities: {
     eyebrow: "Ce qui le rend unique",
     title: "Les mille facettes d'un même amour",
     intro:
-      "Chaque qualité est un morceau de lui. Personnalisez ces blocs avec vos propres mots et vos propres souvenirs.",
+      "Chaque qualité est un morceau de lui. Voici celles que nous avons voulu mettre en lumière, avec nos propres mots.",
   },
 
   gallery: {
@@ -113,19 +115,19 @@ export const siteConfig = {
     eyebrow: "Livre d'or",
     title: "Les mots du cœur",
     intro:
-      "Laissez un mot à Papa. Il s'affiche ici, sur votre appareil, et vous pouvez l'envoyer à la famille en un clic.",
+      "Laissez un mot à Papa : un souvenir, un merci, une pensée. Il s'affiche ici, sur votre appareil, et vous pouvez le transmettre à la famille en un clic.",
     wallTitle: "Vos mots pour Papa",
     emptyTitle: "Aucun message pour l'instant",
     emptyBody: "Soyez la première personne à lui écrire quelques mots.",
     formTitle: "Laisse-lui un message",
     formIntro:
-      "Quelques lignes suffisent. Prenez le temps de lui dire ce que vous avez sur le cœur.",
+      "Quelques lignes suffisent. Dites-lui ce que vous avez sur le cœur : un souvenir, un merci, ou simplement ce que sa présence a changé pour vous.",
     consentLabel: "J'accepte que ce message soit enregistré sur cet appareil.",
     moderationNotice:
       "Votre message reste sur cet appareil. Pour qu'il arrive à Papa, envoyez-le à la famille avec WhatsApp ou copiez-le.",
     successTitle: "Merci du fond du cœur",
-    demoNotice:
-      "Les messages ci-dessous sont des exemples de démonstration : il ne s'agit pas de véritables témoignages.",
+    wallNotice:
+      "Quelques mots déjà déposés pour lui, par celles et ceux qui l'aiment. Ajoutez le vôtre : il apparaîtra ici, sur cet appareil.",
     pageSize: 12,
   },
 
@@ -134,9 +136,9 @@ export const siteConfig = {
     title: "Si nous devions te dire une seule chose…",
     // Texte de démonstration, générique et non attribué à une personne réelle.
     paragraphs: [
-      "Ce serait peut-être simplement : merci. Merci d'avoir été là, sans bruit, avec cette constance qui rassure et qui construit.",
+      "Papa, si nous devions te dire une seule chose, ce serait peut-être simplement : merci. Merci d'avoir été là, sans bruit, avec cette constance qui rassure et qui construit.",
       "Tu nous as appris que la valeur d'une vie ne se mesure pas à ce qu'elle accumule, mais à ce qu'elle donne. Et tu as donné, encore et encore, souvent sans rien attendre en retour.",
-      "Aujourd'hui, nous voulons te rendre un peu de cette chaleur. Que cette page soit un endroit où l'on puisse te redire, à plusieurs voix, à quel point tu comptes.",
+      "Aujourd'hui, nous voulons te rendre un peu de cette chaleur. Que cette page soit un endroit où l'on puisse te redire, à plusieurs voix, à quel point tu comptes pour nous.",
       "Joyeux anniversaire, Jean Paul. Nous t'aimons.",
     ],
     signature: "Avec tout notre amour, ta famille",
@@ -173,6 +175,7 @@ export const siteConfig = {
       src: "/images/IMG-20261025-WA0020.jpg",
       alt: "Jean Paul entouré des siens",
       focal: "center",
+      ratio: "tall",
     },
     primaryCta: { label: "Lui écrire un mot", href: "#laisser-un-message" },
     secondaryCta: { label: "Revoir l'album", href: "#souvenirs" },

@@ -90,6 +90,18 @@ export function loadGuestbook(): GuestbookEntry[] {
 }
 
 /**
+ * Instantané utilisé par React pendant le rendu serveur **et** l'hydratation.
+ *
+ * Il doit toujours renvoyer la même chose que ce que le serveur a rendu (une
+ * liste vide, puisque `localStorage` n'existe pas côté serveur). Le navigateur
+ * bascule ensuite sur `loadGuestbook` après l'hydratation : c'est ce qui évite
+ * l'erreur « Hydration failed ».
+ */
+export function loadGuestbookServerSnapshot(): GuestbookEntry[] {
+  return EMPTY;
+}
+
+/**
  * Enregistre un message localement.
  * Retourne `null` si le stockage est indisponible (navigation privée, quota,
  * stockage désactivé) : l'appelant peut ainsi afficher une vraie erreur au

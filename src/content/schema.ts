@@ -10,6 +10,19 @@ import { z } from "zod";
 export const focalPositions = ["top", "center", "bottom"] as const;
 export type FocalPosition = (typeof focalPositions)[number];
 
+/** Formats d'affichage disponibles pour les images (voir `MediaFrame`). */
+export const imageRatios = [
+  "portrait",
+  "tall",
+  "vertical",
+  "photo",
+  "square",
+  "landscape",
+  "wide",
+  "fill",
+] as const;
+export type ImageRatio = (typeof imageRatios)[number];
+
 /** Référence d'image. `src` à `null` affiche un cadre de remplacement. */
 export const imageRefSchema = z.object({
   src: z.string().nullable().default(null),
@@ -17,6 +30,13 @@ export const imageRefSchema = z.object({
   caption: z.string().optional(),
   credit: z.string().optional(),
   focal: z.enum(focalPositions).default("center"),
+  /**
+   * Format d'affichage conseillé pour cette photo. Renseignez-le pour éviter
+   * les recadrages malheureux : `vertical` (9/16) pour une photo de téléphone,
+   * `tall` (3/4) pour une photo classique, `wide` (16/9) pour un paysage…
+   * Laisser vide pour utiliser le format par défaut de la section.
+   */
+  ratio: z.enum(imageRatios).optional(),
 });
 
 export const navLinkSchema = z.object({
@@ -140,7 +160,7 @@ export const messagesCopySchema = z.object({
   consentLabel: z.string(),
   moderationNotice: z.string(),
   successTitle: z.string(),
-  demoNotice: z.string(),
+  wallNotice: z.string(),
   pageSize: z.number().int().min(3).max(48).default(9),
 });
 

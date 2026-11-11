@@ -1,13 +1,13 @@
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-import type { ImageRef } from "@/content/schema";
+import type { ImageRatio, ImageRef } from "@/content/schema";
 import { cn } from "@/lib/utils";
 
-type Ratio = "portrait" | "tall" | "square" | "landscape" | "wide" | "fill";
-
-const ratioClasses: Record<Ratio, string> = {
+const ratioClasses: Record<ImageRatio, string> = {
   portrait: "aspect-[4/5]",
   tall: "aspect-[3/4]",
+  vertical: "aspect-[9/16]",
+  photo: "aspect-[2/3]",
   square: "aspect-square",
   landscape: "aspect-[4/3]",
   wide: "aspect-[16/9]",
@@ -22,39 +22,53 @@ const focalClasses: Record<ImageRef["focal"], string> = {
 
 export interface MediaFrameProps {
   image: ImageRef;
-  ratio?: Ratio;
+  ratio?: ImageRatio;
   className?: string;
   imageClassName?: string;
-  priority?: boolean;
+  /**
+   * Charge l'image immédiatement (`loading="eager"` + `fetchPriority="high"`).
+   * À réserver aux visuels au-dessus de la ligne de flottaison (image LCP) :
+   * ailleurs, le chargement paresseux est plus économe.
+   */
+  eager?: boolean;
   sizes?: string;
   rounded?: boolean;
   showCaption?: boolean;
+  /** `cover` remplit le cadre (recadrage) ; `contain` affiche toute l'image. */
+  fit?: "cover" | "contain";
   /** Texte du cadre de remplacement (sans image configurée). */
   placeholderLabel?: string;
 }
 
 /**
  * Cadre média unique pour tout le site.
- *  - Si `image.src` est renseigné → `next/image` optimisé.
+ *  - Si `image.src` est renseigné → `next/image`.
  *  - Sinon → cadre de remplacement élégant, explicite et accessible.
+ *
+ * Le format d'affichage suit `image.ratio` quand il est renseigné (la photo
+ * garde ainsi ses proportions), sinon le format passé en propriété.
  */
 export function MediaFrame({
   image,
   ratio = "landscape",
   className,
   imageClassName,
-  priority = false,
+  eager = false,
   sizes = "(max-width: 768px) 100vw, 50vw",
   rounded = true,
   showCaption = false,
+  fit = "cover",
   placeholderLabel = "Photographie à ajouter",
 }: MediaFrameProps) {
+  const frameRatio = image.ratio ?? ratio;
+  const isContained = fit === "contain";
+
   return (
     <figure
       className={cn(
         "group relative overflow-hidden",
         rounded && "rounded-[var(--radius-card)]",
-        ratioClasses[ratio],
+        ratioClasses[frameRatio],
         className,
       )}
     >
@@ -63,11 +77,13 @@ export function MediaFrame({
           src={image.src}
           alt={image.alt}
           fill
-          priority={priority}
+          loading={eager ? "eager" : undefined}
+          fetchPriority={eager ? "high" : undefined}
           sizes={sizes}
           className={cn(
-            "object-cover transition-transform duration-[1600ms] ease-[var(--ease-out-expo)]",
-            focalClasses[image.focal],
+            "transition-transform duration-[1600ms] ease-[var(--ease-out-expo)]",
+            isContained ? "object-contain" : "object-cover",
+            !isContained && focalClasses[image.focal],
             imageClassName,
           )}
         />

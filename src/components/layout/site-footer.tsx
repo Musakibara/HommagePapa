@@ -44,7 +44,7 @@ export function SiteFooter({ site }: { site: SiteConfig }) {
             <Heart className="h-3.5 w-3.5 text-ember" aria-hidden="true" />
             {site.footer.familyNote}
           </p>
-          <p className="font-sans text-xs text-mist-soft">
+          <p className="font-sans text-xs text-mist-soft" suppressHydrationWarning>
             {site.footer.credit} · {site.father.fullName} · {year}
           </p>
         </div>
